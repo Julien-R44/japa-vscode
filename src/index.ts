@@ -3,6 +3,7 @@ import { commands, languages } from 'vscode'
 import type { ExtensionContext } from 'vscode'
 import { CmdInvoker } from './cmd_invoker'
 import ExtConfig from './utilities/ext_config'
+import { TestsRunner } from './tests_runner'
 
 export function activate(context: ExtensionContext) {
   console.info('Activating Japa extension...')
@@ -16,10 +17,22 @@ export function activate(context: ExtensionContext) {
     new TestsCodeLensProvider()
   )
 
-  context.subscriptions.push(
+  const commandsDisposables = [
     commands.registerCommand(
       ExtConfig.buildCommandId('invokeCmd'),
       CmdInvoker.exec.bind(CmdInvoker)
-    )
-  )
+    ),
+
+    commands.registerCommand(
+      ExtConfig.buildCommandId('runTestFile'),
+      TestsRunner.runTestFile.bind(TestsRunner)
+    ),
+
+    commands.registerCommand(
+      ExtConfig.buildCommandId('runTest'),
+      TestsRunner.runTest.bind(TestsRunner)
+    ),
+  ]
+
+  context.subscriptions.push(...commandsDisposables)
 }

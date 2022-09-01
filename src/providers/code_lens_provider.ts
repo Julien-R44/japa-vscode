@@ -31,8 +31,6 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       `--files "${basename(options.document.fileName)}"`,
     ]
 
-    console.log
-
     return {
       range: new Range(codeLensLine, 0, codeLensLine, 0),
       isResolved: true,
@@ -58,6 +56,10 @@ export class TestsCodeLensProvider implements CodeLensProvider {
     document: TextDocument,
     _token: CancellationToken
   ): ProviderResult<CodeLens[]> {
+    if (!ExtConfig.tests.enableCodeLens) {
+      return []
+    }
+
     const { tests, groups } = new TestsExtractor().extract(document.getText())
 
     const testsCodeLenses = [...tests, ...groups.flatMap((group) => group.tests)].map((test) =>

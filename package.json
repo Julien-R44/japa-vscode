@@ -40,12 +40,41 @@
     "commands": [
       {
         "command": "japa-vscode.invokeCmd",
-        "title": "Invoke command"
+        "title": "Japa: Invoke command",
+        "enablement": "false"
+      },
+      {
+        "command": "japa-vscode.runTestFile",
+        "title": "Japa: Run test file"
+      },
+      {
+        "command": "japa-vscode.runTest",
+        "title": "Japa: Run test"
+      }
+    ],
+    "keybindings":[
+      {
+        "command": "japa-vscode.runTest",
+        "key": "ctrl+alt+t"
+      },
+      {
+        "command": "japa-vscode.runTestFile",
+        "key": "ctrl+alt+f"
       }
     ],
     "configuration": {
       "title": "Japa",
       "properties": {
+        "japa.tests.watchMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Run tests in watch mode when executed via shortcut/codelens"
+        },
+        "japa.tests.enableCodeLens": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show CodeLenses above tests"
+        },
         "japa.misc.useUnixCd": {
           "type": "boolean",
           "default": false,

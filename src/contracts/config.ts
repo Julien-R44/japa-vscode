@@ -11,6 +11,11 @@ export interface ConfigTests extends Config {
    * Run tests in watch mode when executed via shortcut/codelens
    */
   runTestsInWatchMode: boolean
+
+  /**
+   * Show CodeLenses above tests
+   */
+  enableCodeLens: boolean
 }
 
 export interface ConfigMisc extends Config {
