@@ -92,8 +92,7 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "test:electron": "tsc -p ./ && node ./out/test/run_electron_tests.js",
-    "test:pure": "ts-node test/run_pure_tests.ts",
-    "test": "npm run test:pure",
+    "test": "ts-node test/run_pure_tests.ts",
     "vscode:prepublish": "npm run build",
     "vscode:package": "vsce package",
     "vscode:publish": "vsce publish"
@@ -102,13 +101,14 @@
     "@japa/assert": "^1.3.4",
     "@japa/runner": "^2.0.9",
     "@japa/spec-reporter": "^1.1.12",
+    "@julr/eslint-config": "^0.3.2",
     "@types/node": "16.x",
     "@types/vscode": "^1.70.0",
     "@vscode/test-electron": "^2.1.5",
-    "eslint": "^8.20.0",
+    "eslint": "^8.23.0",
     "ts-node": "^10.9.1",
     "tsup": "^6.2.3",
-    "typescript": "^4.7.4"
+    "typescript": "^4.8.2"
   },
   "eslintConfig": {
     "ignorePatterns": [
@@ -132,8 +132,5 @@
     "bracketSpacing": true,
     "arrowParens": "always",
     "printWidth": 100
-  },
-  "dependencies": {
-    "@julr/eslint-config": "^0.3.2"
   }
 }
