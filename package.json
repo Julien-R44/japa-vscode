@@ -123,10 +123,7 @@
     "extends": [
       "@julr/eslint-config-ts",
       "@julr/eslint-config-prettier"
-    ],
-    "rules": {
-      "no-useless-escape": "off"
-    }
+    ]
   },
   "prettier": {
     "trailingComma": "es5",
