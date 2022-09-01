@@ -9,11 +9,10 @@ export function activate(context: ExtensionContext) {
   console.info('Activating Japa extension...')
 
   languages.registerCodeLensProvider(
-    {
-      language: 'typescript',
-      scheme: 'file',
-      pattern: '**/*.{spec,test}.ts',
-    },
+    [
+      { language: 'typescript', scheme: 'file', pattern: '**/*.{spec,test}.ts' },
+      { language: 'javascript', scheme: 'file', pattern: '**/*.{spec,test}.js' },
+    ],
     new TestsCodeLensProvider()
   )
 

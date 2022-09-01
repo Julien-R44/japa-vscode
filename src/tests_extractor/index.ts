@@ -4,6 +4,11 @@ import {
   isFunctionExpression,
   isImportDeclaration,
   isStatement,
+  isVariableDeclaration,
+  isVariableDeclarator,
+  isCallExpression,
+  isIdentifier,
+  isStringLiteral,
 } from '@babel/types'
 import { GroupNode } from './nodes/group_node'
 import { TestNode } from './nodes/test_node'
@@ -38,7 +43,18 @@ export class TestsExtractor {
    */
   private doesImportJapaRunner() {
     return this.ast.program.body.some((node) => {
-      return isImportDeclaration(node) && node.source.value === '@japa/runner'
+      const japaImportedViaEsm = isImportDeclaration(node) && node.source.value === '@japa/runner'
+
+      const japaImportedViaCjs =
+        isVariableDeclaration(node) &&
+        isVariableDeclarator(node.declarations[0]) &&
+        isCallExpression(node.declarations[0].init) &&
+        isIdentifier(node.declarations[0].init.callee) &&
+        node.declarations[0].init.callee.name === 'require' &&
+        isStringLiteral(node.declarations[0].init.arguments[0]) &&
+        node.declarations[0].init.arguments[0].value === '@japa/runner'
+
+      return japaImportedViaEsm || japaImportedViaCjs
     })
   }
 
