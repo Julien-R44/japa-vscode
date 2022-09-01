@@ -95,8 +95,7 @@
     "test:electron": "tsc -p ./ && node ./out/test/run_electron_tests.js",
     "test:pure": "ts-node test/run_pure_tests.ts",
     "test": "npm run test:pure",
-    "build:webpack": "webpack --mode production --devtool hidden-source-map",
-    "vscode:prepublish": "pnpm build:webpack",
+    "vscode:prepublish": "npm run build",
     "vscode:package": "vsce package",
     "vscode:publish": "vsce publish"
   },
