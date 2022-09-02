@@ -36,6 +36,16 @@
 - `tests.watchMode`: Run tests in watch mode when executed via shortcut/codelens. Defaults to `false`
 - `misc.useUnixCd`: Use Unix-style cd for windows terminals ( Useful when using Cygwin or Git Bash )
 
+## Keybindings
+- `ctrl+shift+t`: Run the test at the cursor position
+- `ctrl+shift+f`: Run the test file in the active editor
+
+These keybindings can be easily changed in your VSCode configuration : 
+
+- F1 -> Preferences: Open Keyboard Shortcuts
+- Type `japa-vscode` in the search bar
+- Change the `japa-vscode.runTest` or `japa-vscode.runTestFile` keybindings
+
 ## Contributing
 * See [contributing guide](./.github/CONTRIBUTING.md)
 * Clone the project and open it in VS Code
