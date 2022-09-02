@@ -29,9 +29,12 @@
 ![](https://user-images.githubusercontent.com/8337858/187944316-c1b5f0c4-2ea2-46f1-9437-a7433db8a2eb.gif)
 
 ## Configuration
+- `tests.npmScript`: The npm script to run when executing tests. Defaults to `test`
+
+  i.e if you set it to `test:unit`, the extension will run `npm run test:unit --flags` when executing tests
+- `tests.enableCodeLens`: Show CodeLenses above each test. Defaults to `true`
+- `tests.watchMode`: Run tests in watch mode when executed via shortcut/codelens. Defaults to `false`
 - `misc.useUnixCd`: Use Unix-style cd for windows terminals ( Useful when using Cygwin or Git Bash )
-- `tests.enableCodeLens`: Show CodeLenses above each test
-- `tests.watchMode`: Run tests in watch mode when executed via shortcut/codelens
 
 ## Contributing
 * See [contributing guide](./.github/CONTRIBUTING.md)
