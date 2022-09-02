@@ -54,7 +54,7 @@ export class CmdInvoker {
      */
     const cmdWithCd =
       platform === 'win32' && !ExtConfig.misc.useUnixCd
-        ? `cd /d "${cwd}" && ${command}`
+        ? `cd "${cwd}"; ${command}`
         : `cd "${cwd}" && ${command}`
 
     this.sendTextToJapaTerminal(cmdWithCd)
