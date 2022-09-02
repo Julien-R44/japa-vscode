@@ -15,7 +15,7 @@ export class TestsRunner {
     }
 
     const workspaceFolder = workspace.getWorkspaceFolder(activeEditor.document.uri)
-    const filename = basename(activeEditor.document.fileName)
+    const filename = workspace.asRelativePath(activeEditor.document.fileName)
 
     return {
       filename,

@@ -13,7 +13,7 @@ import type {
 export class TestsCodeLensProvider implements CodeLensProvider {
   private getProjetRootDirectory(document: TextDocument) {
     const workspaceFolder = workspace.getWorkspaceFolder(document.uri)
-    return workspaceFolder?.uri.path
+    return workspaceFolder!
   }
 
   /**
@@ -28,7 +28,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
     const codeLensLine = options.line - 1 < 0 ? 0 : options.line - 1
     const baseCommandArguments = [
       ExtConfig.tests?.watchMode ? '--watch' : '',
-      `--files "${basename(options.document.fileName)}"`,
+      `--files "${workspace.asRelativePath(options.document.fileName)}"`,
     ]
 
     return {
@@ -39,7 +39,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
         title: options.title,
         arguments: [
           {
-            cwd: this.getProjetRootDirectory(options.document),
+            cwd: this.getProjetRootDirectory(options.document).uri.path,
             command: `npm run test -- ${baseCommandArguments
               .concat(options.commandArguments || [])
               .join(' ')}`,

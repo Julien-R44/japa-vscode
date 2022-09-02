@@ -51,7 +51,7 @@
         "title": "Japa: Run test"
       }
     ],
-    "keybindings":[
+    "keybindings": [
       {
         "command": "japa-vscode.runTest",
         "key": "ctrl+alt+t"
