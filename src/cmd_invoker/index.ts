@@ -18,6 +18,14 @@ export class CmdInvoker {
     terminal.sendText(command)
   }
 
+  private static escapeTestTitle(title: string) {
+    return title
+      .replaceAll('"', '\\"')
+      .replaceAll("'", "\\'")
+      .replaceAll('`', '\\`')
+      .replaceAll('$', '\\$')
+  }
+
   public static async execTests(options: CmdInvokerExecTestsOptions) {
     let command = `npm run ${ExtConfig.tests.npmScript} --`
 
@@ -30,7 +38,8 @@ export class CmdInvoker {
     }
 
     if (options.tests) {
-      command += ` --tests "${options.tests.join(',')}"`
+      const escapedTestsTitles = options.tests.map(this.escapeTestTitle)
+      command += ` --tests "${escapedTestsTitles.join(',')}"`
     }
 
     return CmdInvoker.exec({
