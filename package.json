@@ -74,6 +74,11 @@
           "default": true,
           "description": "Show CodeLenses above tests"
         },
+        "japa.tests.npmScript": {
+          "type": "string",
+          "default": "test",
+          "description": "The npm script to run tests"
+        },
         "japa.misc.useUnixCd": {
           "type": "boolean",
           "default": false,

@@ -16,6 +16,11 @@ export interface ConfigTests extends Config {
    * Show CodeLenses above tests
    */
   enableCodeLens: boolean
+
+  /**
+   * The npm script to run tests
+   */
+  npmScript: string
 }
 
 export interface ConfigMisc extends Config {

@@ -1,6 +1,6 @@
-import { basename } from 'path'
-import { window, workspace } from 'vscode'
+import { Position, TextDocument, window, workspace } from 'vscode'
 import { CmdInvoker } from '../cmd_invoker'
+import { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
 import { TestsExtractor } from '../tests_extractor'
 
 export class TestsRunner {
@@ -25,24 +25,7 @@ export class TestsRunner {
     }
   }
 
-  /**
-   * Run the active test file.
-   */
-  public static runTestFile() {
-    const { filename, workspaceFolder } = this.getActiveEditor()
-
-    return CmdInvoker.exec({
-      command: `npm run test -- --files "${filename}"`,
-      cwd: workspaceFolder,
-    })
-  }
-
-  /**
-   * Run the test at the cursor position.
-   */
-  public static runTest() {
-    const { filename, workspaceFolder, cursorPosition, document } = this.getActiveEditor()
-
+  private static getTestAtCursorPosition(document: TextDocument, cursorPosition: Position) {
     const { tests, groups } = new TestsExtractor().extract(document.getText())
     const flattenedTests = tests.concat(groups.flatMap((group) => group.tests))
 
@@ -57,9 +40,31 @@ export class TestsRunner {
       throw new Error('No test found at the cursor position !')
     }
 
-    return CmdInvoker.exec({
-      command: `npm run test -- --files "${filename}" --tests "${selectedTest.title}"`,
-      cwd: workspaceFolder,
+    return selectedTest
+  }
+
+  /**
+   * Run the given test file. If no test file is given, run the test file of the active editor
+   */
+  public static runTestFile(options?: CmdInvokerExecOptions) {
+    const { filename, workspaceFolder } = this.getActiveEditor()
+
+    return CmdInvoker.execTests({
+      files: [filename],
+      cwd: options?.cwd || workspaceFolder,
+    })
+  }
+
+  /**
+   * Run the given test. If no test is given, run the test at the cursor position
+   */
+  public static runTest(options?: CmdInvokerExecTestsOptions) {
+    const { filename, workspaceFolder, cursorPosition, document } = this.getActiveEditor()
+
+    return CmdInvoker.execTests({
+      files: options?.files || [filename],
+      tests: options?.tests || [this.getTestAtCursorPosition(document, cursorPosition).title],
+      cwd: options?.cwd || workspaceFolder,
     })
   }
 }

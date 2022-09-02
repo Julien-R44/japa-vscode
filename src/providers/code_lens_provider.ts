@@ -1,4 +1,3 @@
-import { basename } from 'path'
 import { Range, workspace } from 'vscode'
 import ExtConfig from '../utilities/ext_config'
 import { TestsExtractor } from '../tests_extractor'
@@ -9,6 +8,7 @@ import type {
   ProviderResult,
   TextDocument,
 } from 'vscode'
+import { CmdInvokerExecTestsOptions } from '../contracts'
 
 export class TestsCodeLensProvider implements CodeLensProvider {
   private getProjetRootDirectory(document: TextDocument) {
@@ -22,29 +22,27 @@ export class TestsCodeLensProvider implements CodeLensProvider {
   private buildCodeLens(options: {
     line: number
     title: string
-    commandArguments?: string[]
     document: TextDocument
+    command: {
+      name: string
+      arguments?: Omit<CmdInvokerExecTestsOptions, 'filename' | 'cwd'>
+    }
   }) {
     const codeLensLine = options.line - 1 < 0 ? 0 : options.line - 1
-    const baseCommandArguments = [
-      ExtConfig.tests?.watchMode ? '--watch' : '',
-      `--files "${workspace.asRelativePath(options.document.fileName)}"`,
-    ]
+
+    const commandArguments = {
+      cwd: this.getProjetRootDirectory(options.document).uri.path,
+      files: [workspace.asRelativePath(options.document.fileName)],
+      ...options.command.arguments,
+    }
 
     return {
       range: new Range(codeLensLine, 0, codeLensLine, 0),
       isResolved: true,
       command: {
-        command: ExtConfig.buildCommandId('invokeCmd'),
+        command: ExtConfig.buildCommandId(options.command.name),
         title: options.title,
-        arguments: [
-          {
-            cwd: this.getProjetRootDirectory(options.document).uri.path,
-            command: `npm run test -- ${baseCommandArguments
-              .concat(options.commandArguments || [])
-              .join(' ')}`,
-          },
-        ],
+        arguments: [commandArguments],
       },
     }
   }
@@ -66,7 +64,10 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       this.buildCodeLens({
         line: test.location.start.line,
         title: `Run the below test`,
-        commandArguments: [`--tests "${test.title}"`],
+        command: {
+          name: 'runTest',
+          arguments: { tests: [test.title] },
+        },
         document,
       })
     )
@@ -76,6 +77,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       this.buildCodeLens({
         line: 0,
         title: 'Run tests for this file',
+        command: { name: 'runTestFile' },
         document,
       }),
     ]
