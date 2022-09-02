@@ -65,7 +65,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
     const testsCodeLenses = [...tests, ...groups.flatMap((group) => group.tests)].map((test) =>
       this.buildCodeLens({
         line: test.location.start.line,
-        title: `Run test ${test.title}`,
+        title: `Run the below test`,
         commandArguments: [`--tests "${test.title}"`],
         document,
       })
