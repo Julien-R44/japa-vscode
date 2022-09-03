@@ -2,6 +2,7 @@ import { platform } from 'process'
 import ExtConfig from '../utilities/ext_config'
 import { window } from 'vscode'
 import { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
+import { commands } from 'vscode'
 
 export class CmdInvoker {
   /**
@@ -14,7 +15,8 @@ export class CmdInvoker {
       terminal = window.createTerminal(`Japa`)
     }
 
-    terminal.show()
+    commands.executeCommand('workbench.action.terminal.clear')
+    terminal.show(true)
     terminal.sendText(command)
   }
 
