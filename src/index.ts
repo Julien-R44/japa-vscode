@@ -4,6 +4,7 @@ import type { ExtensionContext } from 'vscode'
 import { CmdInvoker } from './cmd_invoker'
 import ExtConfig from './utilities/ext_config'
 import { TestsRunner } from './tests_runner'
+import { TestController } from './providers/test_controller'
 
 export function activate(context: ExtensionContext) {
   console.info('Activating Japa extension...')
@@ -38,5 +39,6 @@ export function activate(context: ExtensionContext) {
     ),
   ]
 
-  context.subscriptions.push(...commandsDisposables)
+  const controller = new TestController()
+  context.subscriptions.push(...commandsDisposables, controller.controller)
 }
