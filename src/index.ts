@@ -31,6 +31,11 @@ export function activate(context: ExtensionContext) {
       ExtConfig.buildCommandId('runTest'),
       TestsRunner.runTest.bind(TestsRunner)
     ),
+
+    commands.registerCommand(
+      ExtConfig.buildCommandId('runLatestTest'),
+      TestsRunner.runLatestTest.bind(TestsRunner)
+    ),
   ]
 
   context.subscriptions.push(...commandsDisposables)

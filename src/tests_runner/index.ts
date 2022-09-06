@@ -4,6 +4,8 @@ import { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
 import { TestsExtractor } from '../tests_extractor'
 
 export class TestsRunner {
+  private static latestInvokedTest: CmdInvokerExecTestsOptions | undefined
+
   /**
    * Return the active text editor with additional data
    */
@@ -43,16 +45,28 @@ export class TestsRunner {
     return selectedTest
   }
 
+  public static runLatestTest() {
+    if (!this.latestInvokedTest) {
+      throw new Error('No test has been invoked yet !')
+    }
+
+    return CmdInvoker.execTests(this.latestInvokedTest)
+  }
+
   /**
    * Run the given test file. If no test file is given, run the test file of the active editor
    */
   public static runTestFile(options?: CmdInvokerExecOptions) {
     const { filename, workspaceFolder } = this.getActiveEditor()
 
-    return CmdInvoker.execTests({
+    const execTestParams = {
       files: [filename],
       cwd: options?.cwd || workspaceFolder,
-    })
+    }
+
+    this.latestInvokedTest = execTestParams
+
+    return CmdInvoker.execTests(execTestParams)
   }
 
   /**
@@ -61,10 +75,14 @@ export class TestsRunner {
   public static runTest(options?: CmdInvokerExecTestsOptions) {
     const { filename, workspaceFolder, cursorPosition, document } = this.getActiveEditor()
 
-    return CmdInvoker.execTests({
+    const execTestParams = {
       files: options?.files || [filename],
       tests: options?.tests || [this.getTestAtCursorPosition(document, cursorPosition).title],
       cwd: options?.cwd || workspaceFolder,
-    })
+    }
+
+    this.latestInvokedTest = execTestParams
+
+    return CmdInvoker.execTests(execTestParams)
   }
 }
