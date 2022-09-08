@@ -34,6 +34,7 @@
   i.e if you set it to `test:unit`, the extension will run `npm run test:unit --flags` when executing tests
 - `tests.enableCodeLens`: Show CodeLenses above each test. Defaults to `true`
 - `tests.watchMode`: Run tests in watch mode when executed via shortcut/codelens. Defaults to `false`
+- `tests.filePattern`: The glob pattern to use when searching for tests. Defaults to `**/*.{test,spec}.{ts,js}`
 - `misc.useUnixCd`: Use Unix-style cd for windows terminals ( Useful when using Cygwin or Git Bash )
 
 ## Keybindings

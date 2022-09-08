@@ -21,6 +21,11 @@ export interface ConfigTests extends Config {
    * The npm script to run tests
    */
   npmScript: string
+
+  /**
+   * The pattern used to find test files
+   */
+  filePattern: string
 }
 
 export interface ConfigMisc extends Config {

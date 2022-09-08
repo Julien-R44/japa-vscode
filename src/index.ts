@@ -1,21 +1,41 @@
 import { TestsCodeLensProvider } from './providers/code_lens_provider'
-import { commands, languages } from 'vscode'
+import { commands, Disposable, languages } from 'vscode'
 import type { ExtensionContext } from 'vscode'
 import { CmdInvoker } from './cmd_invoker'
 import ExtConfig from './utilities/ext_config'
 import { TestsRunner } from './tests_runner'
 import { TestController } from './providers/test_controller'
+import { Notifier } from './notifier'
 
-export function activate(context: ExtensionContext) {
-  console.info('Activating Japa extension...')
+/**
+ * Create the TestCodeLensProvider. Dispose the old one if it exists.
+ */
+let testCodeLensProviderDisposable: Disposable | null = null
+async function createTestsCodeLensProvider() {
+  if (testCodeLensProviderDisposable) {
+    testCodeLensProviderDisposable.dispose()
+  }
 
-  languages.registerCodeLensProvider(
+  testCodeLensProviderDisposable = languages.registerCodeLensProvider(
     [
-      { language: 'typescript', scheme: 'file', pattern: '**/*.{spec,test}.ts' },
-      { language: 'javascript', scheme: 'file', pattern: '**/*.{spec,test}.js' },
+      { language: 'typescript', scheme: 'file', pattern: ExtConfig.tests.filePattern },
+      { language: 'javascript', scheme: 'file', pattern: ExtConfig.tests.filePattern },
     ],
     new TestsCodeLensProvider()
   )
+}
+
+/**
+ * Entry point of the extension
+ */
+export function activate(context: ExtensionContext) {
+  console.info('Activating Japa extension...')
+
+  if (!ExtConfig.tests.filePattern) {
+    Notifier.showError('Please provide a valid file pattern in the extension settings')
+  }
+
+  ExtConfig.onDidChange(createTestsCodeLensProvider, { immediate: true })
 
   const commandsDisposables = [
     commands.registerCommand(

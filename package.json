@@ -72,6 +72,11 @@
     "configuration": {
       "title": "Japa",
       "properties": {
+        "japa.tests.filePattern": {
+          "type": "string",
+          "default": "**/*.{test,spec}.{ts,js}",
+          "description": "The pattern used to find test files."
+        },
         "japa.tests.watchMode": {
           "type": "boolean",
           "default": false,

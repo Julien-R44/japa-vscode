@@ -93,6 +93,8 @@ export class TestController {
     this.extractor = new TestsExtractor()
     this.controller = tests.createTestController('japa-tests', 'Japa Tests')
 
+    ExtConfig.onDidChange(() => this.discoverAllFilesInWorkspace.bind(this))
+
     this.controller.resolveHandler = async (test) => {
       if (!test) {
         await this.discoverAllFilesInWorkspace()
