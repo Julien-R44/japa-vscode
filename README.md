@@ -24,6 +24,7 @@
 * Support multiple workspaces
 * Support Javascript, Typescript, ESM, CJS
 * Works with Adonis.js projects using Japa
+* Snippets
 
 ## Demo
 ![](https://user-images.githubusercontent.com/8337858/187944316-c1b5f0c4-2ea2-46f1-9437-a7433db8a2eb.gif)
@@ -46,6 +47,10 @@ These keybindings can be easily changed in your VSCode configuration :
 - F1 -> Preferences: Open Keyboard Shortcuts
 - Type `japa-vscode` in the search bar
 - Change the `japa-vscode.runTest` or `japa-vscode.runTestFile` keybindings
+
+## Snippets
+
+All snippets are prefixed with `ja:`. Give it a try in your editor to see what's available.
 
 ## Contributing
 * See [contributing guide](./.github/CONTRIBUTING.md)

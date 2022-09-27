@@ -24,6 +24,7 @@
   ],
   "categories": [
     "Programming Languages",
+    "Snippets",
     "Other"
   ],
   "icon": "assets/japa.png",
@@ -36,6 +37,12 @@
   ],
   "main": "./dist/index.js",
   "contributes": {
+    "snippets": [
+      {
+        "language": "typescript",
+        "path": "./snippets/index.json"
+      }
+    ],
     "commands": [
       {
         "command": "japa-vscode.invokeCmd",
