@@ -2,13 +2,10 @@
   "publisher": "jripouteau",
   "name": "japa-vscode",
   "displayName": "Japa Extension",
+  "version": "0.0.7",
+  "description": "The VSCode extension for Japa.",
   "author": "Julien Ripouteau <julien@ripouteau.com>",
   "license": "MIT",
-  "description": "The VSCode extension for Japa.",
-  "version": "0.0.7",
-  "engines": {
-    "vscode": "^1.70.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Julien-R44/japa-vscode.git"
@@ -27,7 +24,11 @@
     "Snippets",
     "Other"
   ],
+  "main": "./dist/index.js",
   "icon": "assets/japa.png",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
   "sponsor": {
     "url": "https://github.com/sponsors/Julien-R44"
   },
@@ -35,7 +36,6 @@
     "onLanguage:typescript",
     "onLanguage:javascript"
   ],
-  "main": "./dist/index.js",
   "contributes": {
     "snippets": [
       {

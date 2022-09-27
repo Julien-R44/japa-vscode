@@ -1,5 +1,6 @@
 import { TextDecoder } from 'util'
-import { Uri, workspace } from 'vscode'
+import { workspace } from 'vscode'
+import type { Uri } from 'vscode'
 
 const decoder = new TextDecoder()
 

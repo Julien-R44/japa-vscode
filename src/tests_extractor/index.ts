@@ -1,14 +1,14 @@
 import { parse } from '@babel/parser'
 import {
   isArrowFunctionExpression,
+  isCallExpression,
   isFunctionExpression,
+  isIdentifier,
   isImportDeclaration,
   isStatement,
+  isStringLiteral,
   isVariableDeclaration,
   isVariableDeclarator,
-  isCallExpression,
-  isIdentifier,
-  isStringLiteral,
 } from '@babel/types'
 import { GroupNode } from './nodes/group_node'
 import { TestNode } from './nodes/test_node'
@@ -23,7 +23,7 @@ export class TestsExtractor {
    */
   private generateAst(source: string) {
     try {
-      const ast = parse(source, {
+      return parse(source, {
         sourceType: 'module',
         plugins: [
           'typescript',
@@ -31,8 +31,6 @@ export class TestsExtractor {
           ['decorators', { decoratorsBeforeExport: true }],
         ],
       })
-
-      return ast
     } catch (err) {
       throw new Error(`Error parsing source: ${err}`)
     }

@@ -1,8 +1,7 @@
 import { platform } from 'process'
+import { commands, window } from 'vscode'
 import ExtConfig from '../utilities/ext_config'
-import { window } from 'vscode'
-import { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
-import { commands } from 'vscode'
+import type { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
 
 export class CmdInvoker {
   /**
@@ -42,7 +41,7 @@ export class CmdInvoker {
 
     return CmdInvoker.exec({
       cwd: options.cwd,
-      command: command,
+      command,
     })
   }
 

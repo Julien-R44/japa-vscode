@@ -1,6 +1,7 @@
 import { Range, workspace } from 'vscode'
 import ExtConfig from '../utilities/ext_config'
 import { TestsExtractor } from '../tests_extractor'
+import type { CmdInvokerExecTestsOptions } from '../contracts'
 import type {
   CancellationToken,
   CodeLens,
@@ -8,7 +9,6 @@ import type {
   ProviderResult,
   TextDocument,
 } from 'vscode'
-import { CmdInvokerExecTestsOptions } from '../contracts'
 
 export class TestsCodeLensProvider implements CodeLensProvider {
   private getProjetRootDirectory(document: TextDocument) {

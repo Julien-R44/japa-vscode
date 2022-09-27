@@ -1,7 +1,8 @@
-import { Position, TextDocument, window, workspace } from 'vscode'
+import { window, workspace } from 'vscode'
 import { CmdInvoker } from '../cmd_invoker'
-import { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
 import { TestsExtractor } from '../tests_extractor'
+import type { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
+import type { Position, TextDocument } from 'vscode'
 
 export class TestsRunner {
   private static latestInvokedTest: CmdInvokerExecTestsOptions | undefined

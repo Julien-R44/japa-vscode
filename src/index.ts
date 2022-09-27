@@ -1,11 +1,11 @@
+import { commands, languages } from 'vscode'
 import { TestsCodeLensProvider } from './providers/code_lens_provider'
-import { commands, Disposable, languages } from 'vscode'
-import type { ExtensionContext } from 'vscode'
 import { CmdInvoker } from './cmd_invoker'
 import ExtConfig from './utilities/ext_config'
 import { TestsRunner } from './tests_runner'
 import { TestController } from './providers/test_controller'
 import { Notifier } from './notifier'
+import type { Disposable, ExtensionContext } from 'vscode'
 
 /**
  * Create the TestCodeLensProvider. Dispose the old one if it exists.
@@ -29,6 +29,7 @@ async function createTestsCodeLensProvider() {
  * Entry point of the extension
  */
 export function activate(context: ExtensionContext) {
+  // eslint-disable-next-line no-console
   console.info('Activating Japa extension...')
 
   if (!ExtConfig.tests.filePattern) {

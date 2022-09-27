@@ -1,15 +1,9 @@
-import {
-  RelativePattern,
-  tests,
-  Uri,
-  workspace,
-  TestController as VSTestController,
-  TestItem,
-} from 'vscode'
+import { RelativePattern, tests, workspace } from 'vscode'
 import { TestsExtractor } from '../tests_extractor'
-import { TestNode } from '../tests_extractor/nodes/test_node'
 import { getFileContent } from '../utilities'
 import ExtConfig from '../utilities/ext_config.js'
+import type { TestNode } from '../tests_extractor/nodes/test_node'
+import type { TestItem, Uri, TestController as VSTestController } from 'vscode'
 
 export class TestController {
   public controller: VSTestController
