@@ -21,11 +21,7 @@ export class CmdInvoker {
   }
 
   private static escapeTestTitle(title: string) {
-    return title
-      .replaceAll('"', '\\"')
-      .replaceAll("'", "\\'")
-      .replaceAll('`', '\\`')
-      .replaceAll('$', '\\$')
+    return title.replaceAll('"', '\\"').replaceAll('$', '\\$')
   }
 
   public static async execTests(options: CmdInvokerExecTestsOptions) {

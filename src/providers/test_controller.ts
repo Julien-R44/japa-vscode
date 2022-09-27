@@ -9,6 +9,7 @@ import {
 import { TestsExtractor } from '../tests_extractor'
 import { TestNode } from '../tests_extractor/nodes/test_node'
 import { getFileContent } from '../utilities'
+import ExtConfig from '../utilities/ext_config.js'
 
 export class TestController {
   public controller: VSTestController
