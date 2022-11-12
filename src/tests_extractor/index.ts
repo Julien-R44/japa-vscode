@@ -28,6 +28,7 @@ export class TestsExtractor {
         plugins: [
           'typescript',
           'decoratorAutoAccessors',
+          'importAssertions',
           ['decorators', { decoratorsBeforeExport: true }],
         ],
       })
