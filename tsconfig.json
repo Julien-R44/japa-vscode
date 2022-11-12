@@ -29,5 +29,5 @@
     "forceConsistentCasingInFileNames": true,
     "outDir": "out"
   },
-  "exclude": ["node_modules", ".vscode-test"]
+  "exclude": ["node_modules", ".vscode-test", "test/fixtures"]
 }
