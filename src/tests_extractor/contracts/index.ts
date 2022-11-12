@@ -1,12 +1,11 @@
 import type {
   CallExpression,
   ExpressionStatement,
-  File,
   Identifier,
   MemberExpression,
   SourceLocation,
 } from '@babel/types'
-import type { ParseResult } from '@babel/parser'
+import type { parse } from '@babel/parser'
 
 export type BabelTestGroupNode = ExpressionStatement & {
   expression: CallExpression & {
@@ -20,6 +19,6 @@ export type BabelTestNode = ExpressionStatement & {
   expression: CallExpression
 }
 
-export type Ast = ParseResult<File>
+export type Ast = ReturnType<typeof parse>
 
 export type Location = Omit<SourceLocation, 'filename' | 'identifierName'>
