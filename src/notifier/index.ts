@@ -10,6 +10,10 @@ export class Notifier {
     return window.showInformationMessage(message)
   }
 
+  public static async log(message: string) {
+    this.outputChannel.appendLine(message)
+  }
+
   /**
    * Show an error message to the user
    */

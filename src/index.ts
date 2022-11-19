@@ -29,8 +29,7 @@ async function createTestsCodeLensProvider() {
  * Entry point of the extension
  */
 export function activate(context: ExtensionContext) {
-  // eslint-disable-next-line no-console
-  console.info('Activating Japa extension...')
+  Notifier.log('Activating Japa extension...')
 
   if (!ExtConfig.tests.filePattern) {
     Notifier.showError('Please provide a valid file pattern in the extension settings')
@@ -62,4 +61,6 @@ export function activate(context: ExtensionContext) {
 
   const controller = new TestController()
   context.subscriptions.push(...commandsDisposables, controller.controller)
+
+  Notifier.log('Japa extension activated.')
 }
