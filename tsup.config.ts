@@ -8,6 +8,8 @@ export default defineConfig({
   noExternal: [
     'docblock',
     'fast-glob',
+    '@babel/parser',
+    '@babel/types',
     'lodash.groupby',
     'vscode-ext-help-and-feedback-view',
     'vscode-html-languageservice',
