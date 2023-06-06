@@ -62,7 +62,7 @@ export class TestNode {
     if (isStringLiteral(firstArgument)) {
       return firstArgument.value
     }
-    return 'Unkown test name'
+    return 'Unknown test name'
   }
 
   constructor(node: BabelTestNode) {

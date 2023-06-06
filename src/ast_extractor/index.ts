@@ -5,19 +5,20 @@ import {
   isFunctionExpression,
   isIdentifier,
   isImportDeclaration,
+  isMemberExpression,
   isStatement,
   isStringLiteral,
   isVariableDeclaration,
   isVariableDeclarator,
 } from '@babel/types'
+import traverse from '@babel/traverse'
 import { GroupNode } from './nodes/group_node'
 import { TestNode } from './nodes/test_node'
+import { SnapshotMatchNode } from './nodes/snapshot_match_node'
 import type { Ast, BabelTestGroupNode } from './contracts'
 import type { Statement } from '@babel/types'
 
 export class AstExtractor {
-  private ast!: Ast
-
   /**
    * Generate an AST from the given source
    */
@@ -36,8 +37,8 @@ export class AstExtractor {
   /**
    * Is the file importing `test` from `@japa/runner`
    */
-  private doesImportJapaRunner() {
-    return this.ast.program.body.some((node) => {
+  private doesImportJapaRunner(ast: Ast) {
+    return ast.program.body.some((node) => {
       const japaImportedViaEsm = isImportDeclaration(node) && node.source.value === '@japa/runner'
 
       const japaImportedViaCjs =
@@ -107,15 +108,45 @@ export class AstExtractor {
   }
 
   /**
+   * Walk over the AST and search for snapshot match calls expressions
+   */
+  private searchSnapshotCalls(ast: Ast, tests: TestNode[]) {
+    const snapshotCalls: SnapshotMatchNode[] = []
+
+    traverse(ast, {
+      CallExpression(path) {
+        const node = path.node
+        if (
+          SnapshotMatchNode.isAssertMatchSnapshot(node) ||
+          SnapshotMatchNode.isExpectMatchSnapshot(node)
+        ) {
+          snapshotCalls.push(new SnapshotMatchNode(node, tests))
+        }
+      },
+    })
+
+    return snapshotCalls
+  }
+
+  /**
    * Extract tests and groups from the given source
    */
   public extract(source: string) {
-    this.ast = this.generateAst(source)
+    const ast = this.generateAst(source)
 
-    if (!this.doesImportJapaRunner()) {
+    if (!this.doesImportJapaRunner(ast)) {
       throw new Error('`test` from @japa/runner is not imported')
     }
 
-    return this.searchTestsAndGroups(this.ast.program.body)
+    const testAndGroups = this.searchTestsAndGroups(ast.program.body)
+
+    const allTests = [
+      ...testAndGroups.tests,
+      ...testAndGroups.groups.flatMap((group) => group.tests),
+    ]
+
+    const snapshotCalls = this.searchSnapshotCalls(ast, allTests)
+
+    return { ...testAndGroups, snapshots: snapshotCalls }
   }
 }

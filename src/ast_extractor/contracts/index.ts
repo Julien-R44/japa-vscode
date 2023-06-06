@@ -19,6 +19,12 @@ export type BabelTestNode = ExpressionStatement & {
   expression: CallExpression
 }
 
+export type BabelSnapshotMatchNode = CallExpression & {
+  callee: MemberExpression & {
+    property: Identifier
+  }
+}
+
 export type Ast = ReturnType<typeof parse>
 
 export type Location = Omit<SourceLocation, 'filename' | 'identifierName'>

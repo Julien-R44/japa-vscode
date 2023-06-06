@@ -5,6 +5,7 @@ import ExtConfig from './utilities/ext_config'
 import { TestsRunner } from './tests_runner'
 import { TestController } from './providers/test_controller'
 import { Notifier } from './notifier'
+import { openSnapshotFile } from './utilities'
 import type { Disposable, ExtensionContext } from 'vscode'
 
 /**
@@ -57,6 +58,8 @@ export function activate(context: ExtensionContext) {
       ExtConfig.buildCommandId('runLatestTest'),
       TestsRunner.runLatestTest.bind(TestsRunner)
     ),
+
+    commands.registerCommand(ExtConfig.buildCommandId('openSnapshotFile'), openSnapshotFile),
   ]
 
   const controller = new TestController()

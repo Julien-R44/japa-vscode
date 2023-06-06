@@ -1,4 +1,5 @@
 import { assert } from '@japa/assert'
+import { snapshot } from '@japa/snapshot'
 import { specReporter } from '@japa/spec-reporter'
 import { configure, processCliArgs, run } from '@japa/runner'
 
@@ -19,7 +20,7 @@ configure({
   ...processCliArgs(process.argv.slice(2)),
   ...{
     files: ['./test/suites/pure/**/*.spec.ts'],
-    plugins: [assert()],
+    plugins: [assert(), snapshot()],
     reporters: [specReporter()],
     importer: (filePath) => import(filePath),
   },

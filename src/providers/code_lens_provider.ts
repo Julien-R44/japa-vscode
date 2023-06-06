@@ -1,6 +1,7 @@
 import { Range, workspace } from 'vscode'
 import ExtConfig from '../utilities/ext_config'
 import { AstExtractor } from '../ast_extractor'
+import type { SnapshotMatchNode } from '../ast_extractor/nodes/snapshot_match_node'
 import type { CmdInvokerExecTestsOptions } from '../contracts'
 import type {
   CancellationToken,
@@ -19,7 +20,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
   /**
    * Build a CodeLens for the given parameters.
    */
-  private buildCodeLens(options: {
+  private buildTestRunCodeLens(options: {
     line: number
     title: string
     document: TextDocument
@@ -48,6 +49,27 @@ export class TestsCodeLensProvider implements CodeLensProvider {
   }
 
   /**
+   * Build a CodeLens for a snapshot match call expression
+   */
+  private buildSeeSnapshotCodeLens(document: TextDocument, snapshot: SnapshotMatchNode) {
+    return {
+      isResolved: true,
+      range: new Range(snapshot.location.start.line - 1, 0, snapshot.location.start.line - 1, 0),
+      command: {
+        title: 'See snapshot',
+        command: ExtConfig.buildCommandId('openSnapshotFile'),
+        arguments: [
+          {
+            testPath: document.fileName,
+            testName: snapshot.test.title,
+            snapshotIndex: snapshot.index,
+          },
+        ],
+      },
+    }
+  }
+
+  /**
    * Provide CodeLens for each test in the file.
    */
   public provideCodeLenses(
@@ -58,12 +80,13 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       return []
     }
 
-    const { tests, groups } = new AstExtractor().extract(document.getText())
+    const { tests, groups, snapshots } = new AstExtractor().extract(document.getText())
+    const allTests = [...tests, ...groups.flatMap((group) => group.tests)]
 
-    const testsCodeLenses = [...tests, ...groups.flatMap((group) => group.tests)].map((test) =>
-      this.buildCodeLens({
+    const testsCodeLenses = allTests.map((test) =>
+      this.buildTestRunCodeLens({
         line: test.location.start.line,
-        title: `Run the below test`,
+        title: `Run test`,
         command: {
           name: 'runTest',
           arguments: { tests: [test.title] },
@@ -72,9 +95,14 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       })
     )
 
+    const snapshotCodeLenses = snapshots.map((snapshot) =>
+      this.buildSeeSnapshotCodeLens(document, snapshot)
+    )
+
     return [
       ...testsCodeLenses,
-      this.buildCodeLens({
+      ...snapshotCodeLenses,
+      this.buildTestRunCodeLens({
         line: 0,
         title: 'Run tests for this file',
         command: { name: 'runTestFile' },
