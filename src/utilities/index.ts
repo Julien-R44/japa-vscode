@@ -1,6 +1,7 @@
 import { TextDecoder } from 'util'
 import { basename, dirname } from 'path'
 import { window, workspace } from 'vscode'
+import pkgUp from 'pkg-up'
 import type { Uri } from 'vscode'
 
 const decoder = new TextDecoder()
@@ -43,4 +44,16 @@ export async function openSnapshotFile(options: {
   await window.showTextDocument(textDocument, { selection: snapshotLine.range })
 
   window.showTextDocument(textDocument)
+}
+
+/**
+ * Returns the nearest directory containing a package.json file
+ */
+export function getNearestDirContainingPkgJson(options: { cwd: string }) {
+  const nearestPkgJsonDir = pkgUp.sync({ cwd: options.cwd })
+  if (!nearestPkgJsonDir) {
+    return
+  }
+
+  return dirname(nearestPkgJsonDir)
 }

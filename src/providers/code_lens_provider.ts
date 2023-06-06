@@ -1,6 +1,7 @@
 import { Range, workspace } from 'vscode'
 import ExtConfig from '../utilities/ext_config'
 import { AstExtractor } from '../ast_extractor'
+import { getNearestDirContainingPkgJson } from '../utilities'
 import type { SnapshotMatchNode } from '../ast_extractor/nodes/snapshot_match_node'
 import type { CmdInvokerExecTestsOptions } from '../contracts'
 import type {
@@ -14,7 +15,9 @@ import type {
 export class TestsCodeLensProvider implements CodeLensProvider {
   private getProjetRootDirectory(document: TextDocument) {
     const workspaceFolder = workspace.getWorkspaceFolder(document.uri)
-    return workspaceFolder!
+    const nearestPkgJsonDir = getNearestDirContainingPkgJson({ cwd: document.fileName })
+
+    return nearestPkgJsonDir || workspaceFolder?.uri.path
   }
 
   /**
@@ -32,7 +35,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
     const codeLensLine = options.line - 1 < 0 ? 0 : options.line - 1
 
     const commandArguments = {
-      cwd: this.getProjetRootDirectory(options.document).uri.path,
+      cwd: this.getProjetRootDirectory(options.document),
       files: [workspace.asRelativePath(options.document.fileName)],
       ...options.command.arguments,
     }

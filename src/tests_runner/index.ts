@@ -1,6 +1,7 @@
 import { window, workspace } from 'vscode'
 import { CmdInvoker } from '../cmd_invoker'
 import { AstExtractor } from '../ast_extractor'
+import { getNearestDirContainingPkgJson } from '../utilities'
 import type { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
 import type { Position, TextDocument } from 'vscode'
 
@@ -19,10 +20,14 @@ export class TestsRunner {
 
     const workspaceFolder = workspace.getWorkspaceFolder(activeEditor.document.uri)
     const filename = workspace.asRelativePath(activeEditor.document.fileName)
+    const nearestPkgJsonDir = getNearestDirContainingPkgJson({
+      cwd: activeEditor.document.fileName,
+    })
 
     return {
       filename,
       workspaceFolder: workspaceFolder!.uri.path,
+      nearestPkgJsonDir: nearestPkgJsonDir!,
       document: activeEditor.document,
       cursorPosition: activeEditor.selection.active,
     }
@@ -74,13 +79,16 @@ export class TestsRunner {
    * Run the given test. If no test is given, run the test at the cursor position
    */
   public static runTest(options?: CmdInvokerExecTestsOptions) {
-    const { filename, workspaceFolder, cursorPosition, document } = this.getActiveEditor()
+    const { filename, workspaceFolder, cursorPosition, document, nearestPkgJsonDir } =
+      this.getActiveEditor()
 
     const execTestParams = {
       files: options?.files || [filename],
       tests: options?.tests || [this.getTestAtCursorPosition(document, cursorPosition).title],
-      cwd: options?.cwd || workspaceFolder,
+      cwd: options?.cwd || nearestPkgJsonDir || workspaceFolder,
     }
+
+    console.log(execTestParams)
 
     this.latestInvokedTest = execTestParams
 
