@@ -10,7 +10,6 @@ import {
   isVariableDeclaration,
   isVariableDeclarator,
 } from '@babel/types'
-import { Notifier } from '../notifier'
 import { GroupNode } from './nodes/group_node'
 import { TestNode } from './nodes/test_node'
 import type { Ast, BabelTestGroupNode } from './contracts'
@@ -23,20 +22,15 @@ export class AstExtractor {
    * Generate an AST from the given source
    */
   private generateAst(source: string) {
-    try {
-      return parse(source, {
-        sourceType: 'module',
-        plugins: [
-          'typescript',
-          'decoratorAutoAccessors',
-          'importAssertions',
-          ['decorators', { decoratorsBeforeExport: true }],
-        ],
-      })
-    } catch (err) {
-      Notifier.logError('Error while parsing the source file', err)
-      throw err
-    }
+    return parse(source, {
+      sourceType: 'module',
+      plugins: [
+        'typescript',
+        'decoratorAutoAccessors',
+        'importAssertions',
+        ['decorators', { decoratorsBeforeExport: true }],
+      ],
+    })
   }
 
   /**
