@@ -5,6 +5,7 @@
 
 ## Features
 * Run tests without typing anything. Either with a shortcut, or via Code Lenses
+* "See snapshot" codelens to quickly see the snapshot of a test ( for [@japa/snapshot](https://github.com/japa/snapshot) )
 * Support multiple workspaces
 * Support Javascript, Typescript, ESM, CJS
 * Works with Adonis.js projects using Japa
