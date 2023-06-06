@@ -88,8 +88,6 @@ export class TestsRunner {
       cwd: options?.cwd || nearestPkgJsonDir || workspaceFolder,
     }
 
-    console.log(execTestParams)
-
     this.latestInvokedTest = execTestParams
 
     return CmdInvoker.execTests(execTestParams)
