@@ -5,7 +5,6 @@ import {
   isFunctionExpression,
   isIdentifier,
   isImportDeclaration,
-  isMemberExpression,
   isStatement,
   isStringLiteral,
   isVariableDeclaration,
