@@ -1,13 +1,13 @@
 import { RelativePattern, tests, workspace } from 'vscode'
-import { TestsExtractor } from '../tests_extractor'
+import { AstExtractor } from '../ast_extractor'
 import { getFileContent } from '../utilities'
 import ExtConfig from '../utilities/ext_config.js'
-import type { TestNode } from '../tests_extractor/nodes/test_node'
+import type { TestNode } from '../ast_extractor/nodes/test_node'
 import type { TestItem, Uri, TestController as VSTestController } from 'vscode'
 
 export class TestController {
   public controller: VSTestController
-  private extractor: TestsExtractor
+  private extractor: AstExtractor
 
   /**
    * In this function, we'll get the file TestItem if we've already found it,
@@ -85,7 +85,7 @@ export class TestController {
   }
 
   constructor() {
-    this.extractor = new TestsExtractor()
+    this.extractor = new AstExtractor()
     this.controller = tests.createTestController('japa-tests', 'Japa Tests')
 
     ExtConfig.onDidChange(() => this.discoverAllFilesInWorkspace.bind(this))

@@ -1,6 +1,6 @@
 import { window, workspace } from 'vscode'
 import { CmdInvoker } from '../cmd_invoker'
-import { TestsExtractor } from '../tests_extractor'
+import { AstExtractor } from '../ast_extractor'
 import type { CmdInvokerExecOptions, CmdInvokerExecTestsOptions } from '../contracts'
 import type { Position, TextDocument } from 'vscode'
 
@@ -29,7 +29,7 @@ export class TestsRunner {
   }
 
   private static getTestAtCursorPosition(document: TextDocument, cursorPosition: Position) {
-    const { tests, groups } = new TestsExtractor().extract(document.getText())
+    const { tests, groups } = new AstExtractor().extract(document.getText())
     const flattenedTests = tests.concat(groups.flatMap((group) => group.tests))
 
     const selectedTest = flattenedTests.find((test) => {

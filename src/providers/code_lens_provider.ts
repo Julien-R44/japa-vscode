@@ -1,6 +1,6 @@
 import { Range, workspace } from 'vscode'
 import ExtConfig from '../utilities/ext_config'
-import { TestsExtractor } from '../tests_extractor'
+import { AstExtractor } from '../ast_extractor'
 import type { CmdInvokerExecTestsOptions } from '../contracts'
 import type {
   CancellationToken,
@@ -58,7 +58,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       return []
     }
 
-    const { tests, groups } = new TestsExtractor().extract(document.getText())
+    const { tests, groups } = new AstExtractor().extract(document.getText())
 
     const testsCodeLenses = [...tests, ...groups.flatMap((group) => group.tests)].map((test) =>
       this.buildCodeLens({

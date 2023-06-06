@@ -16,7 +16,7 @@ import { TestNode } from './nodes/test_node'
 import type { Ast, BabelTestGroupNode } from './contracts'
 import type { Statement } from '@babel/types'
 
-export class TestsExtractor {
+export class AstExtractor {
   private ast!: Ast
 
   /**
