@@ -8,6 +8,7 @@ export default defineConfig({
   noExternal: [
     'docblock',
     'fast-glob',
+    'pkg-up',
     '@babel/parser',
     '@babel/types',
     'lodash.groupby',
