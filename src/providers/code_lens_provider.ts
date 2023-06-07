@@ -4,16 +4,15 @@ import { AstExtractor } from '../ast_extractor'
 import { getNearestDirContainingPkgJson } from '../utilities'
 import type { SnapshotMatchNode } from '../ast_extractor/nodes/snapshot_match_node'
 import type { CmdInvokerExecTestsOptions } from '../contracts'
-import type {
-  CancellationToken,
-  CodeLens,
-  CodeLensProvider,
-  ProviderResult,
-  TextDocument,
-} from 'vscode'
+import type { CodeLens, CodeLensProvider, ProviderResult, TextDocument } from 'vscode'
 
 export class TestsCodeLensProvider implements CodeLensProvider {
-  private getProjetRootDirectory(document: TextDocument) {
+  #cachedCodeLenses: CodeLens[] = []
+
+  /**
+   * Returns the root directory of a given TextDocument
+   */
+  #getProjetRootDirectory(document: TextDocument) {
     const workspaceFolder = workspace.getWorkspaceFolder(document.uri)
     const nearestPkgJsonDir = getNearestDirContainingPkgJson({ cwd: document.fileName })
 
@@ -23,7 +22,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
   /**
    * Build a CodeLens for the given parameters.
    */
-  private buildTestRunCodeLens(options: {
+  #buildTestRunCodeLens(options: {
     line: number
     title: string
     document: TextDocument
@@ -35,7 +34,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
     const codeLensLine = options.line - 1 < 0 ? 0 : options.line - 1
 
     const commandArguments = {
-      cwd: this.getProjetRootDirectory(options.document),
+      cwd: this.#getProjetRootDirectory(options.document),
       files: [workspace.asRelativePath(options.document.fileName)],
       ...options.command.arguments,
     }
@@ -54,7 +53,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
   /**
    * Build a CodeLens for a snapshot match call expression
    */
-  private buildSeeSnapshotCodeLens(document: TextDocument, snapshot: SnapshotMatchNode) {
+  #buildSeeSnapshotCodeLens(document: TextDocument, snapshot: SnapshotMatchNode) {
     return {
       isResolved: true,
       range: new Range(snapshot.location.start.line - 1, 0, snapshot.location.start.line - 1, 0),
@@ -72,22 +71,15 @@ export class TestsCodeLensProvider implements CodeLensProvider {
     }
   }
 
-  /**
-   * Provide CodeLens for each test in the file.
-   */
-  public provideCodeLenses(
-    document: TextDocument,
-    _token: CancellationToken
-  ): ProviderResult<CodeLens[]> {
-    if (!ExtConfig.tests.enableCodeLens) {
-      return []
-    }
-
+  #createCodeLenses(document: TextDocument) {
     const { tests, groups, snapshots } = new AstExtractor().extract(document.getText())
-    const allTests = [...tests, ...groups.flatMap((group) => group.tests)]
 
+    /**
+     * Create Test Run CodeLenses
+     */
+    const allTests = [...tests, ...groups.flatMap((group) => group.tests)]
     const testsCodeLenses = allTests.map((test) =>
-      this.buildTestRunCodeLens({
+      this.#buildTestRunCodeLens({
         line: test.location.start.line,
         title: `Run test`,
         command: {
@@ -98,19 +90,41 @@ export class TestsCodeLensProvider implements CodeLensProvider {
       })
     )
 
+    /**
+     * Create See Snapshot CodeLenses
+     */
     const snapshotCodeLenses = snapshots.map((snapshot) =>
-      this.buildSeeSnapshotCodeLens(document, snapshot)
+      this.#buildSeeSnapshotCodeLens(document, snapshot)
     )
 
-    return [
+    const codeLenses = [
       ...testsCodeLenses,
       ...snapshotCodeLenses,
-      this.buildTestRunCodeLens({
+      this.#buildTestRunCodeLens({
         line: 0,
         title: 'Run tests for this file',
         command: { name: 'runTestFile' },
         document,
       }),
     ]
+
+    this.#cachedCodeLenses = codeLenses
+
+    return codeLenses
+  }
+
+  /**
+   * Provide CodeLens for each test in the file.
+   */
+  public provideCodeLenses(document: TextDocument): ProviderResult<CodeLens[]> {
+    if (!ExtConfig.tests.enableCodeLens) {
+      return []
+    }
+
+    try {
+      return this.#createCodeLenses(document)
+    } catch {
+      return this.#cachedCodeLenses || []
+    }
   }
 }
