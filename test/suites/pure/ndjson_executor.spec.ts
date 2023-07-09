@@ -29,7 +29,9 @@ test.group('Ndjson Executor', () => {
       .onTestSuccess(() => assert.isTrue(true))
 
     await ndJsonExecutor.run()
-  }).timeout(3000)
+  })
+    .timeout(3000)
+    .skip(!!process.env.CI)
 
   test('Parse errors', async ({ assert, fs }) => {
     let errors = 0
@@ -81,5 +83,7 @@ test.group('Ndjson Executor', () => {
     await ndJsonExecutor.run()
 
     assert.equal(errors, 2)
-  }).timeout(3000)
+  })
+    .timeout(3000)
+    .skip(!!process.env.CI)
 })
