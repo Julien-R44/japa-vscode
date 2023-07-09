@@ -1,7 +1,9 @@
+import { join } from 'path'
 import { assert } from '@japa/assert'
 import { snapshot } from '@japa/snapshot'
 import { specReporter } from '@japa/spec-reporter'
 import { configure, processCliArgs, run } from '@japa/runner'
+import { fileSystem } from '@japa/file-system'
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +22,14 @@ configure({
   ...processCliArgs(process.argv.slice(2)),
   ...{
     files: ['./test/suites/pure/**/*.spec.ts'],
-    plugins: [assert(), snapshot()],
+    plugins: [
+      assert(),
+      snapshot(),
+      fileSystem({
+        basePath: join(__dirname, 'fixtures/tests'),
+        autoClean: true,
+      }),
+    ],
     reporters: [specReporter()],
     importer: (filePath) => import(filePath),
   },
