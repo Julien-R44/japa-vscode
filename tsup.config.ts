@@ -15,5 +15,9 @@ export default defineConfig({
     'vscode-ext-help-and-feedback-view',
     'vscode-html-languageservice',
     'vscode-languageserver-types',
+    'youch',
+    'slash',
+    'execa',
+    'emittery',
   ],
 })
