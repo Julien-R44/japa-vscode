@@ -20,6 +20,29 @@
 ### Using Code Lenses
 ![](https://user-images.githubusercontent.com/8337858/187944316-c1b5f0c4-2ea2-46f1-9437-a7433db8a2eb.gif)
 
+## Instructions
+
+### Test Explorer
+If you wish to use the vscode test explorer integration, you will need to have Japa version `3.0.0` or higher to be able to use the `--reporter` flag.
+
+Also note that you need to have the `ndjson` reporter activated in your Japa config file, since we are using it to communicate with the extension. `ndjson` is enabled by default if you don't have a `reporters` key in your config file. So if you have a `reporters` config, make sure to inclure `ndjson` in it.
+
+```js
+import { configure, processCLIArgs, run } from '@japa/runner'
+import { assert } from '@japa/assert'
+import { ndjson, spec } from '@japa/reporters'
+
+processCLIArgs(process.argv.splice(2))
+configure({
+  files: ['tests/**/*.spec.js'],
+  plugins: [assert()],
+  reporters: {
+    activated: ['spec'],
+    list: [ndJson(), spec()], // 👈 Make sure to include ndjson
+  }
+})
+```
+
 ## Configuration
 - `tests.npmScript`: The npm script to run when executing tests. Defaults to `test`
 
