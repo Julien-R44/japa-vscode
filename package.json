@@ -108,7 +108,7 @@
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "del-cli dist && tsup",
     "dev": "tsup src",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -143,6 +143,7 @@
     "@types/vscode": "^1.70.0",
     "@vscode/test-electron": "^2.3.2",
     "dedent": "^0.7.0",
+    "del-cli": "^5.0.0",
     "eslint": "^8.42.0",
     "ts-node": "^10.9.1",
     "tsup": "^6.7.0",

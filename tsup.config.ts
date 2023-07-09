@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig({
   entry: ['src/index.ts'],
-  external: ['vscode'],
+  external: ['vscode', 'youch', 'stacktracey', 'get-source'],
   format: ['cjs'],
   shims: false,
   noExternal: [
@@ -15,7 +15,6 @@ export default defineConfig({
     'vscode-ext-help-and-feedback-view',
     'vscode-html-languageservice',
     'vscode-languageserver-types',
-    'youch',
     'slash',
     'execa',
     'emittery',

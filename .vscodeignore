@@ -2,6 +2,9 @@
 .vscode-test/**
 out/**
 node_modules/**
+!node_modules/youch
+!node_modules/stacktracey
+!node_modules/get-source
 src/**
 .gitignore
 .prettierignore
@@ -12,3 +15,5 @@ vsc-extension-quickstart.md
 **/.eslintrc.json
 **/*.map
 **/*.ts
+.github
+test/
