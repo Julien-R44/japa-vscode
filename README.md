@@ -4,7 +4,8 @@
 </div>
 
 ## Features
-* Run tests without typing anything. Either with a shortcut, or via Code Lenses
+* [Vscode Testing API](https://code.visualstudio.com/api/extension-guides/testing) integration 
+* Run tests without typing anything. Either with a shortcut, Code Lenses, or using Vscode Test Explorer
 * "See snapshot" codelens to quickly see the snapshot of a test ( for [@japa/snapshot](https://github.com/japa/snapshot) )
 * Support multiple workspaces
 * Support Javascript, Typescript, ESM, CJS
@@ -12,6 +13,11 @@
 * Snippets
 
 ## Demo
+
+### Using Vscode Test Explorer
+![](https://github.com/Julien-R44/japa-vscode/assets/8337858/0eba59be-3897-4a70-95a2-06b1195b85b0)
+
+### Using Code Lenses
 ![](https://user-images.githubusercontent.com/8337858/187944316-c1b5f0c4-2ea2-46f1-9437-a7433db8a2eb.gif)
 
 ## Configuration
