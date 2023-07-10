@@ -1,6 +1,6 @@
 import execa from 'execa'
 import Emittery from 'emittery'
-import Youch from 'youch'
+import ErrorStackParser from 'error-stack-parser'
 import { unique } from '../utilities/pure'
 import type { NdJsonRunnerOption, TestEndEvent, TestFailureEvent, TestSuccessEvent } from '../types'
 
@@ -64,18 +64,21 @@ export class NdJsonExecutor {
   /**
    * Parse the error stack and return the first app frame
    */
-  async #parseErrorStack(error: Error) {
-    if (!error.stack) {
+  async #parseErrorStack(rawError: any) {
+    if (!rawError.stack) {
       return
     }
 
-    const error1 = new Error(error.message)
-    error1.stack = error.stack
+    const error = new Error(rawError.message)
+    error.stack = rawError.stack
 
-    const youch = new Youch(error1, {})
-    const youchErr = await youch.toJSON()
+    const frames = ErrorStackParser.parse(error)
+    return frames.find((frame) => {
+      const isNodeModule = frame.fileName?.includes('node_modules/')
+      const isNodeInternals = frame.isNative || frame.isEval || frame.fileName?.startsWith('node:')
 
-    return youchErr.error.frames.find((frame) => frame.isApp)
+      return !isNodeModule && !isNodeInternals
+    })
   }
 
   /**

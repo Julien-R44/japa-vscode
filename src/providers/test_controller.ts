@@ -144,7 +144,10 @@ export class TestController {
   }
 
   #frameToRange(frame: Frame): Range {
-    return new Range(new Position(frame.line - 1 ?? 0, 0), new Position(frame.line ?? 0, 0))
+    return new Range(
+      new Position((frame.lineNumber ?? 0) - 1, 0),
+      new Position(frame.lineNumber ?? 0, 0)
+    )
   }
 
   async #runHandler(request: TestRunRequest, token: CancellationToken, shouldDebug: boolean) {

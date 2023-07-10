@@ -67,16 +67,16 @@ test.group('Ndjson Executor', () => {
         assert.deepEqual(test.mainError.actual, '2')
         assert.deepEqual(test.mainError.expected, '4')
         assert.deepEqual(test.mainError.message, 'expected 2 to equal 4')
-        assert.include(test.mainError.frame!.file, 'fixtures/tests/maths.spec.js')
-        assert.deepEqual(test.mainError.frame!.line, 4)
+        assert.include(test.mainError.frame!.fileName, 'fixtures/tests/maths.spec.js')
+        assert.deepEqual(test.mainError.frame!.lineNumber, 4)
       }
 
       if (title === 'subtract two numbers') {
         assert.deepEqual(test.mainError.actual, '0')
         assert.deepEqual(test.mainError.expected, '4')
         test.mainError.message.includes('expected 0 to equal 4')
-        assert.include(test.mainError.frame!.file, 'fixtures/tests/maths.spec.js')
-        assert.deepEqual(test.mainError.frame!.line, 5)
+        assert.include(test.mainError.frame!.fileName, 'fixtures/tests/maths.spec.js')
+        assert.deepEqual(test.mainError.frame!.lineNumber, 5)
       }
     })
 

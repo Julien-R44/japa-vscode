@@ -1,12 +1,9 @@
 import type { TestItem } from 'vscode'
-import type Youch from 'youch'
-
-type Unpromisify<T> = T extends Promise<infer U> ? U : T // Unpromisify the Promise
 
 /**
  * A frame from Youch
  */
-export type Frame = Unpromisify<ReturnType<Youch<any, any>['toJSON']>>['error']['frames'][number]
+export type Frame = StackFrame
 
 /**
  * Options accepted by NdJsonRunner
