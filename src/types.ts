@@ -1,7 +1,7 @@
 import type { TestItem } from 'vscode'
 
 /**
- * A frame from Youch
+ * A stack frame `error-stack-parser` returns
  */
 export type Frame = StackFrame
 
