@@ -72,7 +72,7 @@ test.group('Ndjson Executor', (group) => {
     await ndJsonExecutor.run()
   })
 
-  test('Parse errors', async ({ assert, fs }) => {
+  test('Parse assertions errors', async ({ assert, fs }) => {
     let errors = 0
 
     await fs.create(
@@ -122,5 +122,30 @@ test.group('Ndjson Executor', (group) => {
     await ndJsonExecutor.run()
 
     assert.equal(errors, 2)
+  })
+
+  test('Parse generic errors', async ({ assert, fs }) => {
+    await fs.create(
+      'maths.spec.js',
+      dedent/* js */ `
+      import { test } from '@japa/runner'
+
+      test('add two numbers', ({ assert }) => {
+        const f = null
+        f.toString()
+      })`
+    )
+
+    const ndJsonExecutor = new NdJsonExecutor({
+      cwd: join(__dirname, '../../fixtures'),
+      files: ['maths.spec.js'],
+    }).onTestFailure((test) => {
+      assert.equal(test.title.original, 'add two numbers')
+      assert.equal(test.mainError.message, "Cannot read properties of null (reading 'toString')")
+      assert.include(test.mainError.frame!.fileName, 'fixtures/tests/maths.spec.js')
+      assert.deepEqual(test.mainError.frame!.lineNumber, 5)
+    })
+
+    await ndJsonExecutor.run()
   })
 })
