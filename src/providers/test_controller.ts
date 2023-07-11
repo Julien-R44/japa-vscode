@@ -209,10 +209,10 @@ export class TestController {
      * Process each queue item
      */
     for (const { bags, tests, type } of queue) {
-      const workspaceFolder = workspace.workspaceFolders![0]!.uri.fsPath
+      const workspaceFolder = workspace.getWorkspaceFolder(bags[0]!.testItem.uri!)!
 
       const options: NdJsonRunnerOptions = {
-        cwd: workspaceFolder,
+        cwd: workspaceFolder.uri.fsPath,
         script: ExtConfig.tests.npmScript,
         debug: shouldDebug,
         files: bags.map(({ testItem }) => workspace.asRelativePath(testItem.uri!)),
