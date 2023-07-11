@@ -2,6 +2,7 @@ import execa from 'execa'
 import Emittery from 'emittery'
 import ErrorStackParser from 'error-stack-parser'
 import { unique } from '../utilities/pure'
+import { E_NDJSON_NOT_ACTIVATED } from '../errors'
 import type { NdJsonRunnerOption, TestEndEvent, TestFailureEvent, TestSuccessEvent } from '../types'
 
 export class NdJsonExecutor {
@@ -115,7 +116,6 @@ export class NdJsonExecutor {
   async #processLine(line: string) {
     this.emitter.emit('new:line', line)
 
-    console.log(line)
     const isJson = line.startsWith('{')
     if (!isJson) return
 
@@ -207,9 +207,21 @@ export class NdJsonExecutor {
   async run() {
     const args = this.#prepareCommandArgs()
     this.#japaProcess = execa('npm', args, { cwd: this.#options.cwd })
+    let error: Error | null = null
 
     this.#japaProcess.stdout?.on('data', async (data) => {
-      const lines = data.toString().split('\n').filter(Boolean)
+      const content = data.toString()
+
+      /**
+       * Not sure why but words in the output are getting split into multiple lines ?
+       * Tried to disable colors, but that didn't help. So for now just compare
+       * like this
+       */
+      if (content.includes('Error:\nInvalid\nreporter\n"ndjson"')) {
+        error = new E_NDJSON_NOT_ACTIVATED()
+      }
+
+      const lines = content.split('\n').filter(Boolean)
 
       for (const line of lines) {
         await this.#processLine(line)
@@ -219,5 +231,7 @@ export class NdJsonExecutor {
     try {
       await this.#japaProcess
     } catch (error) {}
+
+    if (error) throw error
   }
 }

@@ -148,4 +148,37 @@ test.group('Ndjson Executor', (group) => {
 
     await ndJsonExecutor.run()
   })
+
+  test('Throw if ndjson reporter is not activated', async ({ assert, fs }) => {
+    await fs.create(
+      'config.js',
+      dedent/* js */ `
+        import { configure, processCLIArgs, run } from '@japa/runner'
+        import { assert } from '@japa/assert'
+        import { spec, dot, ndjson } from '@japa/runner/reporters'
+
+        processCLIArgs(process.argv.splice(2))
+        configure({
+          files: ['tests/**/*.spec.js'],
+          plugins: [assert()],
+          reporters: {
+            activated: ['spec'],
+            list: [spec()]
+          }
+        })
+
+        run()
+      `
+    )
+
+    const ndJsonExecutor = new NdJsonExecutor({
+      cwd: join(__dirname, '../../fixtures'),
+      script: 'test-fs',
+    })
+
+    await assert.rejects(
+      async () => ndJsonExecutor.run(),
+      /Make sure to register the ndjson reporter in your Japa config file/
+    )
+  })
 })
