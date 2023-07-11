@@ -38,6 +38,14 @@ export class NdJsonExecutor {
   }
 
   /**
+   * When a test is marked as todo
+   */
+  onTestTodo(cb: (test: TestEndEvent) => any) {
+    this.emitter.on('test:todo', cb)
+    return this
+  }
+
+  /**
    * When a test is skipped
    */
   onTestSkip(cb: (test: TestEndEvent) => any) {
@@ -107,6 +115,7 @@ export class NdJsonExecutor {
   async #processLine(line: string) {
     this.emitter.emit('new:line', line)
 
+    console.log(line)
     const isJson = line.startsWith('{')
     if (!isJson) return
 
@@ -122,6 +131,7 @@ export class NdJsonExecutor {
     }
 
     const isTestEnd = parsedLine.event === 'test:end'
+    const isTodo = parsedLine.isTodo
     const hasError = parsedLine.errors?.length > 0
     const isSkipped = parsedLine.isSkipped
 
@@ -130,6 +140,11 @@ export class NdJsonExecutor {
     }
 
     this.emitter.emit('test:end', parsedLine)
+
+    if (isTodo) {
+      this.emitter.emit('test:todo', parsedLine)
+      return
+    }
 
     if (isSkipped) {
       this.emitter.emit('test:skip', parsedLine)

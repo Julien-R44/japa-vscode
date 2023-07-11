@@ -208,10 +208,15 @@ export class TestController {
         run.failed(linkedTest, testMessage, test.duration)
       })
 
-      ndJsonExecutor.onTestSkip(async (test) => {
-        const linkedTest = tests.find((testItem) => testItem.id === test.title.original)!
-        run.skipped(linkedTest)
-      })
+      ndJsonExecutor
+        .onTestSkip(async (test) => {
+          const linkedTest = tests.find((testItem) => testItem.id === test.title.original)!
+          run.skipped(linkedTest)
+        })
+        .onTestTodo(async (test) => {
+          const linkedTest = tests.find((testItem) => testItem.id === test.title.original)!
+          run.skipped(linkedTest)
+        })
 
       /**
        * When a test passes. just mark it as passed

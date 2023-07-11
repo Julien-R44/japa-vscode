@@ -5,7 +5,9 @@ import { test } from '@japa/runner'
 import dedent from 'dedent'
 import { NdJsonExecutor } from '../../../src/tests_runner/ndjson_runner'
 
-test.group('Ndjson Executor', () => {
+test.group('Ndjson Executor', (group) => {
+  group.tap((test) => test.timeout(3000).skip(!!process.env.CI))
+
   test('Basic', async ({ assert, fs }) => {
     assert.plan(6)
 
@@ -30,8 +32,45 @@ test.group('Ndjson Executor', () => {
 
     await ndJsonExecutor.run()
   })
-    .timeout(3000)
-    .skip(!!process.env.CI)
+
+  test('process todos and skips', async ({ assert, fs }) => {
+    assert.plan(2)
+
+    await fs.create(
+      'maths.spec.js',
+      dedent/* js */ `
+      import { test } from '@japa/runner'
+
+      test.group('Maths - basic', () => {
+        test('add two numbers', ({ assert }) => assert.equal(1 + 1, 2))
+        test('subtract two numbers', async ({ assert }) => assert.equal(1 - 1, 0))
+        test('multiply two numbers', ({ assert }) => assert.equal(1 * 1, 1))
+      })`
+    )
+
+    await fs.create(
+      'maths.spec.js',
+      dedent/* js */ `
+        import { test } from '@japa/runner'
+
+        test('todo')
+        test('skip', () => {}).skip(true)
+      `
+    )
+
+    const ndJsonExecutor = new NdJsonExecutor({
+      cwd: join(__dirname, '../../fixtures'),
+      files: ['maths.spec.js'],
+    })
+      .onTestSkip((test) => {
+        assert.equal(test.title.original, 'skip')
+      })
+      .onTestTodo((test) => {
+        assert.equal(test.title.original, 'todo')
+      })
+
+    await ndJsonExecutor.run()
+  })
 
   test('Parse errors', async ({ assert, fs }) => {
     let errors = 0
@@ -84,6 +123,4 @@ test.group('Ndjson Executor', () => {
 
     assert.equal(errors, 2)
   })
-    .timeout(3000)
-    .skip(!!process.env.CI)
 })
