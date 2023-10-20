@@ -103,6 +103,11 @@
           "type": "boolean",
           "default": false,
           "description": "Use Unix-style cd for windows terminals ( Useful when using Cygwin or Git Bash )"
+        },
+        "japa.misc.disableNodeWarnings": {
+          "type": "boolean",
+          "default": true,
+          "description": "Disable Node.js warnings"
         }
       }
     }

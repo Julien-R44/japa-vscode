@@ -33,4 +33,9 @@ export interface ConfigMisc extends Config {
    * Use Unix-style cd for windows terminals ( Useful when using Cygwin or Git Bash )
    */
   useUnixCd: boolean
+
+  /**
+   * Disable node warnings in the terminal by setting the `NODE_NO_WARNINGS` variable
+   */
+  disableNodeWarnings: boolean
 }
