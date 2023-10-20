@@ -13,7 +13,6 @@ import { getFileContent } from '../utilities'
 import ExtConfig from '../utilities/ext_config.js'
 import { NdJsonExecutor } from '../tests_runner/ndjson_runner'
 import { iterableToArray } from '../utilities/pure'
-import { E_NDJSON_NOT_ACTIVATED } from '../errors'
 import { Notifier } from '../notifier'
 import type {
   CategorizedTestBags,
