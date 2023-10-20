@@ -177,7 +177,7 @@ export class NdJsonExecutor {
    * Prepare the command arguments to be passed to Japa
    */
   #prepareCommandArgs() {
-    const args = ['run', this.#options.script!, '--', '--reporter', 'ndjson']
+    const args = ['run', this.#options.script!, '--', '--reporters', 'ndjson']
 
     if (this.#options.files) {
       args.push('--files', unique(this.#options.files).join(','))
