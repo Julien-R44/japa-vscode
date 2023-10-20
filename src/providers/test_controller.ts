@@ -244,8 +244,8 @@ export class TestController {
 
       try {
         await ndJsonExecutor.run()
-      } catch (error) {
-        if (!(error instanceof E_NDJSON_NOT_ACTIVATED)) {
+      } catch (error: any) {
+        if (!('message' in error)) {
           throw error
         }
 
