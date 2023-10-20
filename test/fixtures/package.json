@@ -1,5 +1,6 @@
 {
   "name": "fixtures",
+  "type": "module",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
@@ -9,9 +10,8 @@
   },
   "author": "Julien Ripouteau <julien@ripouteau.com>",
   "license": "ISC",
-  "type": "module",
   "devDependencies": {
-    "@japa/runner": "^3.0.0-6",
-    "@japa/assert": "^2.0.0-1"
+    "@japa/runner": "^3.0.4",
+    "@japa/assert": "^2.0.0"
   }
 }
