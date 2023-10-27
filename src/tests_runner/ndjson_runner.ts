@@ -230,7 +230,9 @@ export class NdJsonExecutor {
 
     try {
       await this.#japaProcess
-    } catch (error) {}
+    } catch (error) {
+      console.error('[NdJsonExecutor]', error)
+    }
 
     if (error) throw error
   }
