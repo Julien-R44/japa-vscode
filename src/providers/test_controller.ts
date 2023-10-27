@@ -249,6 +249,10 @@ export class TestController {
         }
 
         Notifier.showError(`Could not run tests :\n${error.message}`)
+        run.appendOutput(`\r\n${error.message}\r\n`)
+
+        for (const test of tests) run.errored(test, error)
+
         run.end()
         return
       }
