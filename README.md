@@ -51,6 +51,7 @@ configure({
 - `tests.watchMode`: Run tests in watch mode when executed via shortcut/codelens. Defaults to `false`
 - `tests.filePattern`: The glob pattern to use when searching for tests. Defaults to `**/*.{test,spec}.{ts,js}`
 - `misc.useUnixCd`: Use Unix-style cd for windows terminals ( Useful when using Cygwin or Git Bash )
+- `misc.disableNodeWarnings` : Disable node warnings by setting `NODE_NO_WARNINGS=1` when running tests. Defaults to `true`. 
 
 ## Keybindings
 - `ctrl+shift+t`: Run the test at the cursor position

@@ -11,7 +11,10 @@ export class CmdInvoker {
     let terminal = window.terminals.find((openedTerminal) => openedTerminal.name === 'Japa')
 
     if (!terminal) {
-      terminal = window.createTerminal(`Japa`)
+      terminal = window.createTerminal({
+        name: 'Japa',
+        env: { NODE_NO_WARNINGS: ExtConfig.misc.disableNodeWarnings ? '1' : '0' },
+      })
     }
 
     commands.executeCommand('workbench.action.terminal.clear')
@@ -24,8 +27,7 @@ export class CmdInvoker {
   }
 
   public static async execTests(options: CmdInvokerExecTestsOptions) {
-    let command = ExtConfig.misc.disableNodeWarnings ? 'NODE_NO_WARNINGS=1 ' : ''
-    command += `npm run ${ExtConfig.tests.npmScript} --`
+    let command = `npm run ${ExtConfig.tests.npmScript} --`
 
     if (options.watch || ExtConfig.tests.runTestsInWatchMode) {
       command += ' --watch'
