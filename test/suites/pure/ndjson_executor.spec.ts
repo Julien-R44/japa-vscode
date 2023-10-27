@@ -181,4 +181,29 @@ test.group('Ndjson Executor', (group) => {
       /Make sure to register the ndjson reporter in your Japa config file/
     )
   })
+
+  test('emit new:line:user correctly', async ({ assert, fs }) => {
+    assert.plan(1)
+
+    await fs.create(
+      'maths.spec.js',
+      dedent/* js */ `
+      import { test } from '@japa/runner'
+
+      test('add two numbers', ({ assert }) => {
+        console.log('hello world')
+      })`
+    )
+
+    const ndJsonExecutor = new NdJsonExecutor({
+      cwd: join(__dirname, '../../fixtures'),
+      files: ['maths.spec.js'],
+    }).onNewUserLine((line) => {
+      if (line === 'hello world') {
+        assert.isTrue(true)
+      }
+    })
+
+    await ndJsonExecutor.run()
+  })
 })

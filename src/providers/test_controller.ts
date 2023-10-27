@@ -239,7 +239,7 @@ export class TestController {
         .onTestSkip((test) => this.#onTestSkipped(tests, run, test))
         .onTestTodo((test) => this.#onTestSkipped(tests, run, test))
         .onTestSuccess((test) => this.#onTestPassed(tests, run, test))
-        .onNewLine((line) => run.appendOutput(`${line}\r\n`))
+        .onNewUserLine((line) => run.appendOutput(`${line}\r\n`))
 
       try {
         await ndJsonExecutor.run()

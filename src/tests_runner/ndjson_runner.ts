@@ -1,6 +1,9 @@
+/* eslint-disable sonarjs/no-duplicate-string */
+
 import execa from 'execa'
 import Emittery from 'emittery'
 import ErrorStackParser from 'error-stack-parser'
+
 import { unique } from '../utilities/pure'
 import { E_NDJSON_NOT_ACTIVATED } from '../errors'
 import type { NdJsonRunnerOption, TestEndEvent, TestFailureEvent, TestSuccessEvent } from '../types'
@@ -63,6 +66,15 @@ export class NdJsonExecutor {
   }
 
   /**
+   * Register a callback to be called when a new line that is
+   * not emitted by Japa itself is received
+   */
+  onNewUserLine(cb: (line: string) => any) {
+    this.emitter.on('new:line:user', cb)
+    return this
+  }
+
+  /**
    * Register a callback to be called when the test run ends
    */
   onEnd(cb: () => any) {
@@ -117,7 +129,9 @@ export class NdJsonExecutor {
     this.emitter.emit('new:line', line)
 
     const isJson = line.startsWith('{')
-    if (!isJson) return
+    if (!isJson) {
+      return this.emitter.emit('new:line:user', line)
+    }
 
     const parsedLine = JSON.parse(line)
 
@@ -130,10 +144,18 @@ export class NdJsonExecutor {
       return
     }
 
+    const isSuiteStart = parsedLine.event === 'suite:start'
+    const isSuiteEnd = parsedLine.event === 'suite:end'
+    const isGroupStart = parsedLine.event === 'group:start'
     const isTestEnd = parsedLine.event === 'test:end'
     const isTodo = parsedLine.isTodo
     const hasError = parsedLine.errors?.length > 0
     const isSkipped = parsedLine.isSkipped
+
+    if (!isSuiteStart && !isSuiteEnd && !isGroupStart && !isTestEnd) {
+      this.emitter.emit('new:line:user', line)
+      return
+    }
 
     if (!isTestEnd) {
       return
