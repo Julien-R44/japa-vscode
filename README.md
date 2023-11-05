@@ -30,7 +30,7 @@ Also note that you need to have the `ndjson` reporter activated in your Japa con
 ```js
 import { configure, processCLIArgs, run } from '@japa/runner'
 import { assert } from '@japa/assert'
-import { ndjson, spec } from '@japa/reporters'
+import { ndjson, spec } from '@japa/runner/reporters'
 
 processCLIArgs(process.argv.splice(2))
 configure({
@@ -38,7 +38,7 @@ configure({
   plugins: [assert()],
   reporters: {
     activated: ['spec'],
-    list: [ndJson(), spec()], // 👈 Make sure to include ndjson
+    list: [ndjson(), spec()], // 👈 Make sure to include ndjson
   }
 })
 ```
