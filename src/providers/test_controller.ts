@@ -290,7 +290,7 @@ export class TestController {
     }
 
     const promises = workspace.workspaceFolders.map(async (workspaceFolder) => {
-      const pattern = new RelativePattern(workspaceFolder, '**/*.{spec,test}.{ts,js}')
+      const pattern = new RelativePattern(workspaceFolder, ExtConfig.tests.filePattern)
       const watcher = workspace.createFileSystemWatcher(pattern)
 
       watcher.onDidCreate((uri) => this.getOrCreateFile(uri))
