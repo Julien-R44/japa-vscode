@@ -21,6 +21,8 @@ async function createTestsCodeLensProvider() {
     [
       { language: 'typescript', scheme: 'file', pattern: ExtConfig.tests.filePattern },
       { language: 'javascript', scheme: 'file', pattern: ExtConfig.tests.filePattern },
+      { language: 'typescriptreact', scheme: 'file', pattern: ExtConfig.tests.filePattern },
+      { language: 'javascriptreact', scheme: 'file', pattern: ExtConfig.tests.filePattern },
     ],
     new TestsCodeLensProvider()
   )

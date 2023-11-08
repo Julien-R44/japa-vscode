@@ -25,6 +25,7 @@ export class AstExtractor {
     return parse(source, {
       sourceType: 'module',
       plugins: [
+        'jsx',
         'typescript',
         'decoratorAutoAccessors',
         'importAssertions',

@@ -474,3 +474,51 @@ exports[`Ast Extractor > root tests 1`] = `{
   ],
 }`
 
+exports[`Ast Extractor > jsx file 1`] = `{
+  "groups": [
+    GroupNode {
+      "location": {
+        "end": {
+          "column": 6,
+          "line": 12,
+        },
+        "start": {
+          "column": 4,
+          "line": 4,
+        },
+      },
+      "tests": [
+        TestNode {
+          "location": {
+            "end": {
+              "column": 9,
+              "line": 7,
+            },
+            "start": {
+              "column": 6,
+              "line": 5,
+            },
+          },
+          "title": "foo",
+        },
+        TestNode {
+          "location": {
+            "end": {
+              "column": 9,
+              "line": 11,
+            },
+            "start": {
+              "column": 6,
+              "line": 9,
+            },
+          },
+          "title": "foo2",
+        },
+      ],
+      "title": "group",
+    },
+  ],
+  "snapshots": [],
+  "tests": [],
+}`
+

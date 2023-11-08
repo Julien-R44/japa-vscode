@@ -103,4 +103,22 @@ test.group('Ast Extractor', () => {
 
     assert.snapshot(new AstExtractor().extract(code)).match()
   })
+
+  test('jsx file', async ({ assert }) => {
+    const code = `
+    import { test } from '@japa/runner'
+
+    test.group('group', () => {
+      test("foo", ({ expect }) => {
+        expect(render(<Button />).container).toStrictEqual("BUTTON");
+      });
+
+      test("foo2", ({ expect }) => {
+        expect(render(<Button />).container).toStrictEqual("BUTTON");
+      });
+    })
+    `
+
+    assert.snapshot(new AstExtractor().extract(code)).match()
+  })
 })
