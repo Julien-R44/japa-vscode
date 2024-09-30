@@ -35,7 +35,7 @@ export class TestsCodeLensProvider implements CodeLensProvider {
 
     const commandArguments = {
       cwd: this.#getProjetRootDirectory(options.document),
-      files: [workspace.asRelativePath(options.document.fileName)],
+      files: [workspace.asRelativePath(options.document.fileName, false)],
       ...options.command.arguments,
     }
 

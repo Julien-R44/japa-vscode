@@ -63,11 +63,11 @@ export class TestsRunner {
    * Run the given test file. If no test file is given, run the test file of the active editor
    */
   public static runTestFile(options?: CmdInvokerExecOptions) {
-    const { filename, workspaceFolder } = this.getActiveEditor()
+    const { filename, nearestPkgJsonDir } = this.getActiveEditor()
 
     const execTestParams = {
       files: [filename],
-      cwd: options?.cwd || workspaceFolder,
+      cwd: options?.cwd || nearestPkgJsonDir,
     }
 
     this.latestInvokedTest = execTestParams
