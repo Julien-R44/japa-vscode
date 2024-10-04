@@ -214,7 +214,7 @@ export class TestController {
         cwd: workspaceFolder.uri.fsPath,
         script: ExtConfig.tests.npmScript,
         debug: shouldDebug,
-        files: bags.map(({ testItem }) => workspace.asRelativePath(testItem.uri!)),
+        files: bags.map(({ testItem }) => workspace.asRelativePath(testItem.uri!, false)),
       }
 
       if (type === 'group') {
